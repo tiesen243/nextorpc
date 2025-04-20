@@ -5,7 +5,6 @@ import nextPlugin from '@next/eslint-plugin-next'
 import importPlugin from 'eslint-plugin-import'
 import reactPlugin from 'eslint-plugin-react'
 import hooksPlugin from 'eslint-plugin-react-hooks'
-import turboPlugin from 'eslint-plugin-turbo'
 import tseslint from 'typescript-eslint'
 
 /**
@@ -68,13 +67,6 @@ const baseConfig = tseslint.config(
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
       'import/no-anonymous-default-export': 'warn',
-    },
-  },
-  {
-    plugins: { turbo: turboPlugin },
-    rules: {
-      ...turboPlugin.configs.recommended.rules,
-      'turbo/no-undeclared-env-vars': 'warn',
     },
   },
   {
