@@ -34,17 +34,19 @@ export function ORPCReactProvider({
 }: Readonly<{ children: React.ReactNode }>) {
   const queryClient = getQueryClient()
 
-  const [orpc] = useState(() =>
-    createORPCReactQueryUtils<RouterClient<AppRouter>>(
-      createORPCClient(
-        new RPCLink({
-          url: getBaseUrl() + '/api/orpc',
-          headers: {
-            'x-orpc-source': 'react-nextjs',
-          },
-        }),
-      ),
+  const [client] = useState<RouterClient<AppRouter>>(() =>
+    createORPCClient(
+      new RPCLink({
+        url: getBaseUrl() + '/api/orpc',
+        headers: {
+          'x-orpc-source': 'react-nextjs',
+        },
+      }),
     ),
+  )
+
+  const [orpc] = useState(() =>
+    createORPCReactQueryUtils<RouterClient<AppRouter>>(client),
   )
 
   return (

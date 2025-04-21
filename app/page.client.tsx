@@ -7,7 +7,6 @@ import {
 } from '@tanstack/react-query'
 import { TrashIcon } from 'lucide-react'
 import { toast } from 'sonner'
-import z from 'zod'
 
 import type { Post } from '@/server/db'
 import { Button } from '@/components/ui/button'
@@ -30,13 +29,14 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useORPC } from '@/lib/orpc/react'
+import { createPostSchema } from '@/lib/validators/post'
 
 export const CreatePost: React.FC = () => {
   const orpc = useORPC()
   const queryClient = useQueryClient()
 
   const form = useForm({
-    schema: z.object({ title: z.string().min(1), content: z.string().min(1) }),
+    schema: createPostSchema,
     defaultValues: { title: '', content: '' },
     submitFn: (values) => orpc.post.create.call(values),
     onSuccess: async () => {

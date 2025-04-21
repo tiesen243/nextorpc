@@ -1,6 +1,6 @@
 import { desc, eq } from 'drizzle-orm'
-import z from 'zod'
 
+import { byIdSchema, createPostSchema } from '@/lib/validators/post'
 import { protectedProcedure, publicProcedure } from '@/server/api/orpc'
 import { post as postTable } from '@/server/db/schema/post'
 
@@ -12,12 +12,7 @@ export const postRouter = {
   }),
 
   create: protectedProcedure
-    .input(
-      z.object({
-        title: z.string(),
-        content: z.string(),
-      }),
-    )
+    .input(createPostSchema)
     .handler(async ({ input, context }) => {
       await context.db.insert(postTable).values({
         title: input.title,
@@ -27,7 +22,7 @@ export const postRouter = {
     }),
 
   delete: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(byIdSchema)
     .handler(async ({ input, context }) => {
       await context.db.delete(postTable).where(eq(postTable.id, input.id))
     }),

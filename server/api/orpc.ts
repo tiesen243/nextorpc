@@ -27,6 +27,14 @@ import { db } from '@/server/db'
 export const createORPCContext = async (opts: { headers: Headers }) => {
   const session = await auth()
 
+  const source = opts.headers.get('x-orpc-source') ?? 'unknown'
+  console.log(
+    '>>> oRPC Request from',
+    source,
+    'by',
+    session.user ?? 'anonymous',
+  )
+
   return {
     db,
     session,
