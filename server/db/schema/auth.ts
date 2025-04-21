@@ -1,4 +1,5 @@
 import { createId } from '@paralleldrive/cuid2'
+import { sql } from 'drizzle-orm'
 import { pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 
 export const user = pgTable(
@@ -12,11 +13,10 @@ export const user = pgTable(
     email: t.text('email').notNull(),
     image: t.text('image').notNull(),
     password: t.text('password'),
-    createdAt: t
-      .timestamp('createdAt', { precision: 3 })
-      .notNull()
-      .defaultNow(),
-    updatedAt: t.timestamp('updatedAt', { precision: 3 }).notNull(),
+    createdAt: t.timestamp().defaultNow().notNull(),
+    updatedAt: t
+      .timestamp({ mode: 'date', withTimezone: true })
+      .$onUpdateFn(() => sql`now()`),
   }),
   (t) => [uniqueIndex('User_email_key').on(t.email)],
 )
@@ -31,11 +31,10 @@ export const account = pgTable(
       .text('userId')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-    createdAt: t
-      .timestamp('createdAt', { precision: 3 })
-      .notNull()
-      .defaultNow(),
-    updatedAt: t.timestamp('updatedAt', { precision: 3 }).notNull(),
+    createdAt: t.timestamp().defaultNow().notNull(),
+    updatedAt: t
+      .timestamp({ mode: 'date', withTimezone: true })
+      .$onUpdateFn(() => sql`now()`),
   }),
   (t) => [
     primaryKey({

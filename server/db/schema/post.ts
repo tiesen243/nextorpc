@@ -14,5 +14,5 @@ export const post = pgTable('Post', (t) => ({
     .text('authorId')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-  createdAt: t.timestamp('createdAt', { precision: 3 }).notNull().defaultNow(),
+  createdAt: t.timestamp().defaultNow().notNull(),
 }))

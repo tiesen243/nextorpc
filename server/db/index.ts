@@ -22,3 +22,8 @@ const client = globalForDb.client ?? neon(env.DATABASE_URL)
 if (env.NODE_ENV !== 'production') globalForDb.client = client
 
 export const db = drizzle({ client, schema })
+
+export type User = typeof schema.user.$inferInsert
+export type Account = typeof schema.account.$inferInsert
+export type Session = typeof schema.session.$inferInsert
+export type Post = typeof schema.post.$inferInsert

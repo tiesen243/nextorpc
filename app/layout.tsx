@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 
+import { SessionProvider } from '@/hooks/use-session'
 import { ORPCReactProvider } from '@/lib/orpc/react'
 import { cn } from '@/lib/utils'
 
@@ -46,7 +47,9 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          <ORPCReactProvider>{children}</ORPCReactProvider>
+          <ORPCReactProvider>
+            <SessionProvider>{children}</SessionProvider>
+          </ORPCReactProvider>
         </ThemeProvider>
       </body>
     </html>
