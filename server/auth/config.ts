@@ -1,10 +1,7 @@
-'use server'
-
 import type { AuthOptions } from './core/auth'
-import { Auth } from './core/auth'
 import { GoogleProvider } from './providers/google'
 
-const authOptions = {
+export const authOptions = {
   cookieKey: 'auth_token',
   providers: {
     /**
@@ -21,9 +18,3 @@ const authOptions = {
     google: new GoogleProvider(),
   },
 } satisfies AuthOptions
-
-const authInstance = new Auth(authOptions)
-
-export const handlers = authInstance.handlers.bind(authInstance)
-export const signOut = authInstance.signOut.bind(authInstance)
-export const auth = authInstance.auth.bind(authInstance)

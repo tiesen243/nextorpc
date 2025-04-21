@@ -6,7 +6,7 @@ import { useORPC } from '@/lib/orpc/react'
 
 export const PostList: React.FC = () => {
   const orpc = useORPC()
-  const { data } = useSuspenseQuery(orpc.post.getAll.queryOptions())
+  const { data } = useSuspenseQuery(orpc.post.all.queryOptions())
 
   return (
     <div>
