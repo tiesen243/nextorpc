@@ -47,7 +47,7 @@ const AuthShowcase: React.FC = async () => {
 
       {session.user && (
         <div className="flex justify-between">
-          <h3 className="text-lg font-semibold">
+          <h3 className="text-2xl font-semibold">
             Welcome, {session.user.name}
           </h3>
           <form action="/api/auth/sign-out" method="POST">
