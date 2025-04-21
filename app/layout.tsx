@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 
+import { Toaster } from '@/components/ui/sonner'
 import { SessionProvider } from '@/hooks/use-session'
 import { ORPCReactProvider } from '@/lib/orpc/react'
 import { cn } from '@/lib/utils'
@@ -50,6 +51,8 @@ export default function RootLayout({
           <ORPCReactProvider>
             <SessionProvider>{children}</SessionProvider>
           </ORPCReactProvider>
+
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
