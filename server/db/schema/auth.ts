@@ -1,6 +1,8 @@
 import { createId } from '@paralleldrive/cuid2'
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
+
+import { post } from '@/server/db/schema/post'
 
 export const user = pgTable(
   'User',
@@ -8,6 +10,7 @@ export const user = pgTable(
     id: t
       .text('id')
       .$defaultFn(() => createId())
+      .notNull()
       .primaryKey(),
     name: t.text('name').notNull(),
     email: t.text('email').notNull(),
@@ -20,6 +23,12 @@ export const user = pgTable(
   }),
   (t) => [uniqueIndex('User_email_key').on(t.email)],
 )
+
+export const userRelations = relations(user, ({ many }) => ({
+  accounts: many(account),
+  sessions: many(session),
+  posts: many(post),
+}))
 
 export const account = pgTable(
   'Account',
@@ -44,6 +53,10 @@ export const account = pgTable(
   ],
 )
 
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, { fields: [account.userId], references: [user.id] }),
+}))
+
 export const session = pgTable('Session', (t) => ({
   sessionToken: t.text('sessionToken').primaryKey(),
   expires: t.timestamp('expires', { precision: 3 }).notNull(),
@@ -51,4 +64,8 @@ export const session = pgTable('Session', (t) => ({
     .text('userId')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+}))
+
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, { fields: [session.userId], references: [user.id] }),
 }))

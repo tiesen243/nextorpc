@@ -50,15 +50,14 @@ export class Session {
       sha256(new TextEncoder().encode(token)),
     )
 
-    const session = await this.db.query.session.findFirst({
+    const result = await this.db.query.session.findFirst({
       where: (session, { eq }) => eq(session.sessionToken, sessionToken),
+      with: { user: true },
     })
 
-    const user = await this.db.query.user.findFirst({
-      where: (user, { eq }) => eq(user.id, session?.userId ?? ''),
-    })
+    if (!result) return { expires: new Date() }
 
-    if (!session) return { expires: new Date() }
+    const { user, ...session } = result
 
     if (Date.now() > session.expires.getTime()) {
       await this.db
